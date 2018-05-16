@@ -7,6 +7,7 @@ from multiprocessing import Process
 from gevent.server import StreamServer
 
 from config.config import Config
+from server.client import Client
 
 
 class SimpleMQServer(Process):
@@ -32,6 +33,16 @@ class SimpleMQServer(Process):
         self.server.serve_forever()
 
     def client_connected(self, socket, address):
+        """
+        :param socket:
+        :type socket:gevent._socket3.socket
+        :param address:
+        :type address: tuple
+        :return:
+        """
         # Client is now connected, and this is already a GreenLet
         socket.sendall('Welcome to SimpleMQ \n'.encode())
-        pass
+
+        # And now create a client and listen the data
+        client = Client(socket, address)
+        client.listen()
