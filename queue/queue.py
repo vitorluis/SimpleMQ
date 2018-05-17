@@ -12,3 +12,9 @@ class Queue(Process):
 
     def __init__(self):
         Process.__init__(self)
+
+    def register_consumer(self, consumer):
+        pass
+
+    def publish_message(self, message):
+        pass
