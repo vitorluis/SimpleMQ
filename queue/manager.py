@@ -2,6 +2,7 @@
 """
 @author: v.villar
 """
+from queue.queue import Queue
 
 
 class QueueManager:
@@ -18,13 +19,15 @@ class QueueManager:
         self.queues = []
 
     def add_queue(self, config):
-        pass
+        # For tests purposes, create a queue here
+        q = Queue("newQueue")
+        self.queues.append(q)
 
     def delete_queue(self, queue_id):
         pass
 
     def all_queues(self):
-        pass
+        return self.queues
 
     def get_queue(self):
-        pass
+        return self.queues[0]
