@@ -15,6 +15,7 @@ class Client:
     address = None
     queue_manager = None
     queue = None
+    consumer = None
 
     def __init__(self, socket, address, queue_manager):
         """
@@ -33,7 +34,8 @@ class Client:
         self.queue = self.queue_manager.get_queue()
 
         # Also subscribe for consumption
-        self.queue.register_consumer(Consumer(self))
+        self.consumer = Consumer(self)
+        self.queue.register_consumer(self.consumer)
 
     def listen(self):
         """
@@ -49,6 +51,7 @@ class Client:
                 # Client disconnected, close file and socket
                 file_descriptor.close()
                 self.socket.close()
+                self.queue.remove_consumer(self.consumer)
                 break
 
             self.send_response("Received.")

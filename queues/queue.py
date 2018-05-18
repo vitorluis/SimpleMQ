@@ -49,6 +49,14 @@ class Queue(Process):
         self.consumers.append(consumer)
         return True
 
+    def remove_consumer(self, consumer):
+        """
+        Remove the Consumer from the queue
+        :param consumer:
+        :return:
+        """
+        self.consumers.remove(consumer)
+
     def publish_message(self, message):
         message = Message(message)
         self.stack.write(message)
