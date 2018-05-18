@@ -4,7 +4,7 @@
 """
 from gevent import monkey
 
-from queue.manager import QueueManager
+from queues.manager import QueueManager
 from server.server import SimpleMQServer
 
 monkey.patch_all(subprocess=True)

@@ -25,7 +25,7 @@ class Message:
 
         # Create an ID and get the create date for this message
         self.id = str(uuid.uuid4().hex)
-        self.created_at = pendulum.now().timestamp()
+        self.created_at = pendulum.now('UTC').timestamp()
 
     def __str__(self):
         """

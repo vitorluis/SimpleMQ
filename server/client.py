@@ -2,8 +2,8 @@
 """
 @author: v.villar
 """
-from queue.consumer import Consumer
-from queue.queue import Queue
+from queues.consumer import Consumer
+from queues.queue import Queue
 
 
 class Client:

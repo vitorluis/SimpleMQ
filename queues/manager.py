@@ -2,7 +2,7 @@
 """
 @author: v.villar
 """
-from queue.queue import Queue
+from queues.queue import Queue
 
 
 class QueueManager:

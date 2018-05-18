@@ -7,7 +7,7 @@ import uuid
 from multiprocessing import Process
 
 from message.message import Message
-from queue.stack import Stack
+from queues.stack import Stack
 
 
 class Queue(Process):
