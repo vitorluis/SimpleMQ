@@ -16,7 +16,7 @@ class Message:
     data = None
     created_at = None
 
-    def __init__(self, message):
+    def __init__(self, message, message_id=None, created_at=None):
         """
         Class constructor
         """
@@ -24,8 +24,15 @@ class Message:
         self.data = message
 
         # Create an ID and get the create date for this message
-        self.id = str(uuid.uuid4().hex)
-        self.created_at = pendulum.now('UTC').timestamp()
+        if message_id is None:
+            self.id = str(uuid.uuid4().hex)
+        else:
+            self.id = message_id
+
+        if created_at is None:
+            self.created_at = pendulum.now('UTC').timestamp()
+        else:
+            self.created_at = created_at
 
     def __str__(self):
         """

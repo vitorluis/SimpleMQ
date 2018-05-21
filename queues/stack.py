@@ -2,6 +2,9 @@
 """
 @author: v.villar
 """
+import json
+
+from message.message import Message
 
 
 class Stack:
@@ -43,7 +46,8 @@ class Stack:
         self.lock.acquire()
 
         # Read get the content
-        message = self.messages.pop(0)
+        message = json.loads(self.messages.pop(0))
+        message = Message(message['message'], message['id'], message['created_at'])
 
         # Release our lock
         self.lock.release()
