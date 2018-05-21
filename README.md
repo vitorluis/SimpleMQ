@@ -18,7 +18,7 @@ The second goal is to save the messages In-memory, so thd read/write is really f
 
 We are developing the SimpleMQ in Python using Gevent for concurrent processing.
 
-## Finak notes
+## Final notes
 
 SimpleMQ its not being created to replace RabbitMQ or Kafka (At least, Not for a short term). But you can quickly setup and use in your application, without exchanges, topics (From RabbitMQ and Kafka) or partitions (from Kafka).
 
