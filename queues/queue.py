@@ -41,7 +41,9 @@ class Queue(Process):
         self.id = str(uuid.uuid4().hex)
         self.name = name
         self.max_consumers = max_consumers
-        self.max_data_size = max_data_size
+        self.max_data_size = (max_data_size * 1024) * 1024
+
+        # Check the notification type
         if consumer_type == "notify_all":
             self.consumer_type = Queue.CONSUMER_NOTIFY_ALL
         elif consumer_type == "interleaved":
@@ -52,7 +54,7 @@ class Queue(Process):
 
         # Stack requires a lock object
         self.lock = multiprocessing.Lock()
-        self.stack = Stack(self.lock)
+        self.stack = Stack(self.lock, self.max_data_size)
 
         # Create a list of consumers
         self.consumers = []
@@ -80,6 +82,7 @@ class Queue(Process):
         :return:
         """
         self.consumers.remove(consumer)
+        return True
 
     def publish_message(self, message):
         """

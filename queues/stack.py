@@ -3,8 +3,10 @@
 @author: v.villar
 """
 import json
+import sys
 
 from message.message import Message
+from queues.exceptions import StackOverflowException
 
 
 class Stack:
@@ -13,8 +15,9 @@ class Stack:
     """
     messages = None
     lock = None
+    max_data_size = None
 
-    def __init__(self, lock):
+    def __init__(self, lock, max_data_size):
         """
         Class Constructor.
         :param lock:
@@ -23,6 +26,7 @@ class Stack:
         # Define the initial statuses
         self.messages = []
         self.lock = lock
+        self.max_data_size = max_data_size
 
     def write(self, message):
         """
@@ -34,6 +38,15 @@ class Stack:
         # Acquire the lock for this stack, to be sure that any other producer will write
         # In the same time
         self.lock.acquire()
+
+        # Before append, check if the queue has enough space to save this item
+        if sys.getsizeof(self.messages) >= self.max_data_size:
+            self.lock.release()
+            raise StackOverflowException("We don't have enough space to save this item")
+
+        if (sys.getsizeof(message) + sys.getsizeof(self.messages)) > self.max_data_size:
+            self.lock.release()
+            raise StackOverflowException("We don't have enough space to save this item")
 
         # Add the message
         self.messages.append(message)
