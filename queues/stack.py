@@ -49,7 +49,7 @@ class Stack:
             raise StackOverflowException("We don't have enough space to save this item")
 
         # Add the message
-        self.messages.append(message)
+        self.messages.append(str(message))
 
         # Release the lock
         self.lock.release()

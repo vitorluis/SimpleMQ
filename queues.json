@@ -4,7 +4,7 @@
       "name": "myNewQueue",
       "max_data_size": 2,
       "max_consumers": -1,
-      "consumption_type": "notify_all"
+      "consumption_type": "interleaved"
     }
   ]
 }

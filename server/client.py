@@ -2,6 +2,7 @@
 """
 @author: v.villar
 """
+from queues.consumer import Consumer
 
 
 class Client:
@@ -33,6 +34,12 @@ class Client:
         Function to listen the commands client will enter
         :return:
         """
+        # Subscribe for test purposes
+        self.consumer = Consumer(self)
+        self.queue = self.queue_manager.get_queue("myNewQueue")
+        self.queue.register_consumer(self.consumer)
+        self.queue.publish_message("Something")
+
         self.file_descriptor = self.socket.makefile('rb')
 
         # Infinite loop, to always read what the client says
@@ -44,7 +51,9 @@ class Client:
                 break
 
             # Handle here the command
+            self.queue.publish_message(str(content))
             self.handle_command(content)
+            print(content)
 
     def handle_command(self, content):
         """

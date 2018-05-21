@@ -33,7 +33,7 @@ class QueueManager:
             self.queues_config = json.load(f)
 
         """ Add each queue """
-        for config in self.queues_config:
+        for config in self.queues_config['queues']:
             self.add_queue(config)
 
     def add_queue(self, config):
@@ -43,7 +43,7 @@ class QueueManager:
         :return:
         """
         # Create a new Queue to be transfer data
-        q = Queue(config['name'], config['max_consumers'], config['max_data_size'], config['consumer_type'])
+        q = Queue(config['name'], config['max_consumers'], config['max_data_size'], config['consumption_type'])
 
         # Add the queue to our queue list
         self.queues.append(q)
