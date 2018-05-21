@@ -12,6 +12,7 @@ monkey.patch_all(subprocess=True)
 if __name__ == "__main__":
     # Create the queue manager
     queue_manager = QueueManager()
+    queue_manager.setup()
 
     # Start listen for connections
     server = SimpleMQServer(queue_manager)

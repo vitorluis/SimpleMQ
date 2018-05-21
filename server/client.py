@@ -2,8 +2,6 @@
 """
 @author: v.villar
 """
-from queues.consumer import Consumer
-from queues.queue import Queue
 
 
 class Client:
@@ -13,13 +11,14 @@ class Client:
     """
     socket = None
     address = None
+    file_descriptor = None
     queue_manager = None
     queue = None
     consumer = None
 
     def __init__(self, socket, address, queue_manager):
         """
-
+        Class Constructor
         :param socket:
         :param address:
         :param queue_manager:
@@ -29,36 +28,31 @@ class Client:
         self.address = address
         self.queue_manager = queue_manager
 
-        # For test purpose , get a queue here and publish something
-        self.queue_manager.add_queue(Queue("myQueue"))
-        self.queue = self.queue_manager.get_queue()
-
-        # Also subscribe for consumption
-        self.consumer = Consumer(self)
-        self.queue.register_consumer(self.consumer)
-
     def listen(self):
         """
         Function to listen the commands client will enter
         :return:
         """
-        file_descriptor = self.socket.makefile('rb')
+        self.file_descriptor = self.socket.makefile('rb')
 
         # Infinite loop, to always read what the client says
         while True:
-            content = file_descriptor.readline()
+            content = self.file_descriptor.readline()
             if not content:
                 # Client disconnected, close file and socket
-                file_descriptor.close()
-                self.socket.close()
-                self.queue.remove_consumer(self.consumer)
+                self.finish_connection()
                 break
 
-            self.send_response("Received.")
-            self.queue.publish_message("My content")
-            print(content)
+            # Handle here the command
+            self.handle_command(content)
 
-            # For test purposes, get the queue
+    def handle_command(self, content):
+        """
+        Handle the command
+        :param content:
+        :return:
+        """
+        pass
 
     def send_response(self, data):
         """
@@ -67,3 +61,14 @@ class Client:
         :return:
         """
         self.socket.send(str(data).encode())
+
+    def finish_connection(self):
+        """
+        Finish the client connection
+        :return:
+        """
+        # Close the file descriptor and socket file
+        self.file_descriptor.close()
+        self.socket.close()
+
+        # If have any consumer, we should disconnect here

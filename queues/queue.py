@@ -20,8 +20,14 @@ class Queue(Process):
     lock = None
     consumers = None
     consumer_type = None
+    max_consumers = None
+    max_data_size = None
 
-    def __init__(self, name):
+    # Some constants for this class
+    CONSUMER_NOTIFY_ALL = 0x1
+    CONSUMER_INTERLEAVED = 0x2
+
+    def __init__(self, name, max_consumers, max_data_size, consumer_type):
         """
         Class constructor
         """
@@ -31,6 +37,9 @@ class Queue(Process):
         # Create a new stack for queue and also create an ID
         self.id = str(uuid.uuid4().hex)
         self.name = name
+        self.max_consumers = max_consumers
+        self.max_data_size = max_data_size
+        self.consumer_type = consumer_type
 
         # Stack requires a lock object
         self.lock = multiprocessing.Lock()
@@ -58,8 +67,13 @@ class Queue(Process):
         self.consumers.remove(consumer)
 
     def publish_message(self, message):
+        # Create the new message
         message = Message(message)
+
+        # Put it on the Stack
         self.stack.write(message)
+
+        # Notify the consumers
         self.notify_consumers(message)
         return True
 
