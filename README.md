@@ -18,9 +18,18 @@ The second goal is to save the messages In-memory, so thd read/write is really f
 
 We are developing the SimpleMQ in Python using Gevent for concurrent processing.
 
+## Simple benchmarking
+
+We've done some tests with SimpleMQ. We have two versions of it, one in Python and one compiled from Python to C using the [Nuitka module](http://nuitka.net/). And the results are:
+
+| Version | Writes per sec | Read & Write per sec
+| --- | :---: | :---:
+| Python| 150.000 | 25.000
+| C |  200.000 | 30.000
+
 ## Final notes
 
-SimpleMQ its not being created to replace RabbitMQ or Kafka (At least, Not for a short term). But you can quickly setup and use in your application, without exchanges, topics (From RabbitMQ and Kafka) or partitions (from Kafka).
+SimpleMQ its not being created to replace RabbitMQ or Apache Kafka (At least, Not for a short term). But you can quickly setup and use in your application, without exchanges, topics (From RabbitMQ and Kafka) or partitions (from Kafka).
 
 ## Contributors
 Vitor Villar - Main Developer <vitor.luis98@gmail.com>

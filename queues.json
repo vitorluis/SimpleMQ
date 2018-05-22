@@ -2,7 +2,7 @@
   "queues": [
     {
       "name": "myNewQueue",
-      "max_data_size": 2,
+      "max_data_size": 2000,
       "max_consumers": -1,
       "consumption_type": "interleaved"
     }

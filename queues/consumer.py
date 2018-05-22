@@ -27,5 +27,4 @@ class Consumer:
         :param message:
         :return:
         """
-        print("Sending to client", str(message))
         self.client.send_response(str(message))

@@ -125,6 +125,10 @@ class Queue(Process):
             gevent.joinall(threads)
         else:
             # Pick the caller which will get this notification
+            if len(self.consumers) == 0:
+                self.lock.release()
+                return
+
             consumer = self.consumers.pop(0)
 
             # Send the message
