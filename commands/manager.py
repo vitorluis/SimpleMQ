@@ -5,4 +5,7 @@
 
 
 class CommandManager:
+    """
+    Class to handle commands
+    """
     pass

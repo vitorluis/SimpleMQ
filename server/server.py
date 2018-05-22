@@ -11,6 +11,9 @@ from server.client import Client
 
 
 class SimpleMQServer(Process):
+    """
+    Class responsible to run the server to accept connections
+    """
     server = None
     config = None
     host = "0.0.0.0"
@@ -18,6 +21,10 @@ class SimpleMQServer(Process):
     queue_manager = None
 
     def __init__(self, queue_manager):
+        """
+        Class constructor
+        :param queue_manager:
+        """
         # Call the parent
         Process.__init__(self)
 
@@ -29,9 +36,17 @@ class SimpleMQServer(Process):
         self.queue_manager = queue_manager
 
     def run(self):
+        """
+        Start the server
+        :return:
+        """
         self.create_socket()
 
     def create_socket(self):
+        """
+        Create the socket to receive the connection
+        :return:
+        """
         # Create the socket with the configuration
         self.server = StreamServer((self.host, self.port), self.client_connected)
         self.server.serve_forever()

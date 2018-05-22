@@ -29,10 +29,10 @@ class QueueManager:
         """
         Parse the queue config and create the queues
         """
-        with open(self.config_path) as f:
-            self.queues_config = json.load(f)
+        with open(self.config_path) as file_opened:
+            self.queues_config = json.load(file_opened)
 
-        """ Add each queue """
+        # Add each queue
         for config in self.queues_config['queues']:
             self.add_queue(config)
 
@@ -43,10 +43,10 @@ class QueueManager:
         :return:
         """
         # Create a new Queue to be transfer data
-        q = Queue(config['name'], config['max_consumers'], config['max_data_size'], config['consumption_type'])
+        queue = Queue(config['name'], config['max_consumers'], config['max_data_size'], config['consumption_type'])
 
         # Add the queue to our queue list
-        self.queues.append(q)
+        self.queues.append(queue)
         return True
 
     def delete_queue(self, queue_id):

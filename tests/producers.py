@@ -18,7 +18,7 @@ print(str(s.recv(1024)))
 
 start_time = time.time()
 print("Start time: ", start_time)
-for i in range(0, 30000):
+for i in range(0, 25000):
     s.send("Sending new message\n".encode())
     s.recv(1024)
     # print("the message has been sent")

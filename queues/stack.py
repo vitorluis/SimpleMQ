@@ -55,6 +55,10 @@ class Stack:
         self.lock.release()
 
     def read(self):
+        """
+        Read a message from the Stack
+        :return:
+        """
         # Get the lock, to prevent changes in the stack while reading
         self.lock.acquire()
 

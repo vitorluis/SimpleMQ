@@ -12,7 +12,7 @@ class Message:
     """
     Class which defines a message into the system
     """
-    id = None
+    message_id = None
     data = None
     created_at = None
 
@@ -25,9 +25,9 @@ class Message:
 
         # Create an ID and get the create date for this message
         if message_id is None:
-            self.id = str(uuid.uuid4().hex)
+            self.message_id = str(uuid.uuid4().hex)
         else:
-            self.id = message_id
+            self.message_id = message_id
 
         if created_at is None:
             self.created_at = pendulum.now('UTC').timestamp()
@@ -39,4 +39,5 @@ class Message:
         Stringify the message
         :return:
         """
-        return json.dumps({"id": self.id, "message": self.data, "created_at": self.created_at})
+        data = {"id": self.message_id, "message": self.data, "created_at": self.created_at}
+        return json.dumps(data)

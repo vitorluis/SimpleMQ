@@ -2,9 +2,8 @@
 """
 @author: v.villar
 """
-import multiprocessing
 import uuid
-from multiprocessing import Process
+from multiprocessing import Process, Lock
 
 import gevent
 
@@ -17,7 +16,7 @@ class Queue(Process):
     """
     Class which represents an queue, where it will be put data
     """
-    id = None
+    queue_id = None
     name = None
     stack = None
     lock = None
@@ -38,7 +37,7 @@ class Queue(Process):
         Process.__init__(self)
 
         # Create a new stack for queue and also create an ID
-        self.id = str(uuid.uuid4().hex)
+        self.queue_id = str(uuid.uuid4().hex)
         self.name = name
         self.max_consumers = max_consumers
         self.max_data_size = (max_data_size * 1024) * 1024
@@ -53,7 +52,7 @@ class Queue(Process):
             self.consumer_type = Queue.CONSUMER_NOTIFY_ALL
 
         # Stack requires a lock object
-        self.lock = multiprocessing.Lock()
+        self.lock = Lock()
         self.stack = Stack(self.lock, self.max_data_size)
 
         # Create a list of consumers
@@ -125,7 +124,7 @@ class Queue(Process):
             gevent.joinall(threads)
         else:
             # Pick the caller which will get this notification
-            if len(self.consumers) == 0:
+            if not self.consumers:
                 self.lock.release()
                 return
 

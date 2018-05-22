@@ -9,7 +9,7 @@ class Consumer:
     """
     Class responsible to manage a consumer client
     """
-    id = None
+    consumer_id = None
     client = None
 
     def __init__(self, client):
@@ -18,7 +18,7 @@ class Consumer:
         :param client:
         :type client: server.client.Client
         """
-        self.id = str(uuid.uuid4().hex)
+        self.consumer_id = str(uuid.uuid4().hex)
         self.client = client
 
     def received_message(self, message):
