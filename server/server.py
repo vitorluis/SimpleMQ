@@ -19,8 +19,9 @@ class SimpleMQServer(Process):
     host = "0.0.0.0"
     port = 0
     queue_manager = None
+    event_dispatcher = None
 
-    def __init__(self, queue_manager):
+    def __init__(self, queue_manager, event_dispatcher):
         """
         Class constructor
         :param queue_manager:
@@ -34,6 +35,8 @@ class SimpleMQServer(Process):
 
         # Setup the queue manager
         self.queue_manager = queue_manager
+
+        self.event_dispatcher = event_dispatcher
 
     def run(self):
         """
@@ -63,5 +66,5 @@ class SimpleMQServer(Process):
         socket.sendall('Welcome to SimpleMQ \n'.encode())
 
         # And now create a client and listen the data
-        client = Client(socket, address, self.queue_manager)
+        client = Client(socket, address, self.queue_manager, self.event_dispatcher)
         client.listen()

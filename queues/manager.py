@@ -16,14 +16,16 @@ class QueueManager:
     queues = None
     queues_config = None
     config_path = None
+    event_dispatcher = None
 
-    def __init__(self):
+    def __init__(self, event_dispatcher):
         """
         Class constructor
         """
         # Setup the initial attrs
         self.queues = []
         self.config_path = os.path.join(os.path.dirname(".."), "queues.json")
+        self.event_dispatcher = event_dispatcher
 
     def parse_queue_config(self):
         """

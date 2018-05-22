@@ -16,8 +16,9 @@ class Client:
     queue_manager = None
     queue = None
     consumer = None
+    event_dispatcher = None
 
-    def __init__(self, socket, address, queue_manager):
+    def __init__(self, socket, address, queue_manager, event_dispatcher):
         """
         Class Constructor
         :param socket:
@@ -28,6 +29,7 @@ class Client:
         self.socket = socket
         self.address = address
         self.queue_manager = queue_manager
+        self.event_dispatcher = event_dispatcher
 
     def listen(self):
         """
