@@ -2,9 +2,8 @@
 """
 @author: v.villar
 """
+import json
 import os
-
-import yaml
 
 
 class Config:
@@ -18,12 +17,12 @@ class Config:
         Class constructor
         """
         # Parse the YAML
-        config_file = os.path.join(os.path.dirname(".."), 'config.yaml')
+        config_file = os.path.join(os.path.dirname(".."), 'config.json')
         if not os.path.exists(config_file):
-            config_file = os.path.join(os.path.dirname(__file__), '../config.yaml')
+            config_file = os.path.join(os.path.dirname(__file__), '../config.json')
 
         with open(config_file) as file_opened:
-            data = yaml.load(file_opened)
+            data = json.load(file_opened)
 
             # Convert the dictionary into object
             self.config_dict = data
