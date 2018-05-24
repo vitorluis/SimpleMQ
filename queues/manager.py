@@ -45,7 +45,8 @@ class QueueManager:
         :return:
         """
         # Create a new Queue to be transfer data
-        queue = Queue(config['name'], config['max_consumers'], config['max_data_size'], config['consumption_type'])
+        queue = Queue(config['name'], config['max_consumers'],
+                      config['max_data_size'], config['consumption_type'], self.event_dispatcher)
 
         # Add the queue to our queue list
         self.queues.append(queue)

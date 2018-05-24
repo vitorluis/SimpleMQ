@@ -2,6 +2,7 @@
 """
 @author: v.villar
 """
+from events.types import EventTypes
 from queues.consumer import Consumer
 
 
@@ -25,6 +26,8 @@ class Client:
         :param address:
         :param queue_manager:
         :type queue_manager: queue.manager.QueueManager
+        :param event_dispatcher:
+        :type event_dispatcher: events.dispatcher.EventDispatcher
         """
         self.socket = socket
         self.address = address
@@ -82,3 +85,4 @@ class Client:
         self.socket.close()
 
         # If have any consumer, we should disconnect here
+        self.event_dispatcher.dispatch(EventTypes.ON_CLIENT_DISCONNECTED, self)

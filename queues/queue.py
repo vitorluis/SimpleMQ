@@ -7,6 +7,7 @@ from multiprocessing import Process, Lock
 
 import gevent
 
+from events.types import EventTypes
 from message.message import Message
 from queues.exceptions import MaximumConsumersReachedException
 from queues.stack import Stack
@@ -24,14 +25,17 @@ class Queue(Process):
     consumer_type = None
     max_consumers = None
     max_data_size = None
+    event_dispatcher = None
 
     # Some constants for this class
     CONSUMER_NOTIFY_ALL = 0x1
     CONSUMER_INTERLEAVED = 0x2
 
-    def __init__(self, name, max_consumers, max_data_size, consumer_type):
+    def __init__(self, name, max_consumers, max_data_size, consumer_type, event_dispatcher):
         """
         Class constructor
+        :param event_dispatcher
+        :type event_dispatcher: events.dispatcher.EventDispatcher
         """
         # Call the parent
         Process.__init__(self)
@@ -41,6 +45,7 @@ class Queue(Process):
         self.name = name
         self.max_consumers = max_consumers
         self.max_data_size = (max_data_size * 1024) * 1024
+        self.event_dispatcher = event_dispatcher
 
         # Check the notification type
         if consumer_type == "notify_all":
@@ -57,6 +62,9 @@ class Queue(Process):
 
         # Create a list of consumers
         self.consumers = []
+
+        # Add an event listener here, when client disconnects, remove the consumer
+        self.event_dispatcher.add_event_listener(EventTypes.ON_CLIENT_DISCONNECTED, self.client_disconnected)
 
     def register_consumer(self, consumer):
         """
@@ -128,6 +136,7 @@ class Queue(Process):
                 self.lock.release()
                 return
 
+            # Get the next consumer which should receive the message
             consumer = self.consumers.pop(0)
 
             # Send the message
@@ -138,3 +147,25 @@ class Queue(Process):
 
         # Free the lock
         self.lock.release()
+
+    def client_disconnected(self, client):
+        """
+        Client disconnected, remove the consumer if has one
+        :param client:
+        :type client: server.client.Client
+        :return:
+        """
+        # Get the consumer to be removed
+        consumer = client.consumer
+
+        # if has a consumer attached to it, remove it from our list
+        if consumer is not None:
+            # Acquire the lock, to be sure that while we are receiving messages
+            # This consumer will not be eligible to send a message
+            self.lock.acquire()
+
+            # Remove it
+            self.consumers.remove(consumer)
+
+            # Release the lock and he process still go on :D
+            self.lock.release()

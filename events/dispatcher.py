@@ -2,15 +2,13 @@
 """
 @author: v.villar
 """
-import time
-from multiprocessing import Process
 
 import gevent
 
 from events.exceptions import EventAlreadyExistsException, EventNotFoundException
 
 
-class EventDispatcher(Process):
+class EventDispatcher:
     """
     Class to dispatch event to the listeners
     """
@@ -20,8 +18,6 @@ class EventDispatcher(Process):
         """
         Class constructor
         """
-        Process.__init__(self)
-
         # Create a dictionary with the events
         self.events = {}
 
@@ -73,11 +69,3 @@ class EventDispatcher(Process):
 
             # Join all tasks and wait to finish it
             # gevent.joinall(tasks)
-
-    def run(self):
-        """
-        Run the dispatcher
-        :return:
-        """
-        while True:
-            time.sleep(1)
